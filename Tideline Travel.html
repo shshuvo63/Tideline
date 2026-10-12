@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tideline Travel</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
+<style>
+:root{--bg:#f3f8f8;--ink:#0d2b33;--mut:#51707a;--card:#fff;--line:#d5e4e6;--sea:#0b6e7f;--sun:#ff8a4c;--deep:#08323b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1a1f;--ink:#e6f3f4;--mut:#93b1b8;--card:#11282f;--line:#1f3d46;--sea:#4cc3d6;--deep:#06222a}}
+:root[data-theme="dark"]{--bg:#0a1a1f;--ink:#e6f3f4;--mut:#93b1b8;--card:#11282f;--line:#1f3d46;--sea:#4cc3d6;--deep:#06222a}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Outfit,system-ui,sans-serif;line-height:1.6}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.1;margin:0}
+a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--bg);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-family:Fraunces,serif;font-weight:700;font-size:1.3rem}
+nav ul{display:flex;gap:24px;list-style:none;margin:0;padding:0}
+.btn{background:var(--sun);color:#2a1100;border:0;border-radius:999px;padding:12px 24px;font-weight:600}
+.btn.alt{background:transparent;color:inherit;border:1px solid currentColor}
+.hero{background:linear-gradient(180deg,#0b6e7f,#08323b);color:#fff;padding:72px 0 120px;position:relative;overflow:hidden}
+.hero h1{font-size:clamp(2.6rem,7vw,5rem);max-width:12ch;font-weight:700}
+.hero p{max-width:46ch;font-size:1.15rem;opacity:.9;margin:20px 0 28px}
+.wave{position:absolute;bottom:-1px;left:0;width:100%;height:60px}
+.search{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;background:var(--card);color:var(--ink);padding:16px;border-radius:20px;margin-top:-56px;position:relative;box-shadow:0 12px 40px rgba(8,50,59,.2)}
+.search label{display:block;font-size:.8rem;color:var(--mut);margin-bottom:4px}
+input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+section{padding:72px 0}h2{font-size:clamp(1.9rem,4vw,2.8rem);margin-bottom:12px}
+.sub{color:var(--mut);max-width:56ch;margin:0 0 32px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 18px}
+.chip[aria-pressed=true]{background:var(--sea);color:#fff;border-color:var(--sea)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:24px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden;display:flex;flex-direction:column}
+.pic{height:170px;display:grid;place-items:center;font-size:4rem}
+.card .body{padding:18px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{display:flex;justify-content:space-between;color:var(--mut);font-size:.9rem}
+.price{font-family:Fraunces,serif;font-size:1.5rem;font-weight:700}
+.row{display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:24px;background:var(--deep);color:#fff;border-radius:24px;padding:36px}
+.stats b{font-family:Fraunces,serif;font-size:2.4rem;display:block}
+.quote{padding:24px}.quote p{margin:0 0 12px}
+form{display:grid;gap:14px;max-width:560px}
+.msg{padding:14px;border-radius:12px;background:var(--sea);color:#fff}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:grid;place-items:center;z-index:20;padding:20px}
+.modal>div{background:var(--card);border-radius:22px;padding:28px;max-width:440px;width:100%}
+footer{border-top:1px solid var(--line);padding:32px 0;color:var(--mut)}
+@media(max-width:700px){nav ul{display:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useMemo, useEffect } = React;
+
+const TRIPS = [
+  { id: 1, name: "Santorini Escape", place: "Greece", region: "Europe", days: 7, price: 1890, rating: 4.9, icon: "🏛️", bg: "linear-gradient(135deg,#7cc8f0,#e8f6ff)", about: "Whitewashed villages, caldera sunsets and a boat day to the volcano." },
+  { id: 2, name: "Kyoto in Bloom", place: "Japan", region: "Asia", days: 9, price: 2650, rating: 4.8, icon: "⛩️", bg: "linear-gradient(135deg,#ffb7c9,#fff0f4)", about: "Temples, tea houses and a guided walk through Arashiyama at dawn." },
+  { id: 3, name: "Sundarbans River Trail", place: "Bangladesh", region: "Asia", days: 4, price: 420, rating: 4.7, icon: "🐅", bg: "linear-gradient(135deg,#8fd49a,#e6f7e8)", about: "Cruise the mangrove channels with a naturalist and spot wildlife." },
+  { id: 4, name: "Amalfi Coast Drive", place: "Italy", region: "Europe", days: 6, price: 2140, rating: 4.8, icon: "🍋", bg: "linear-gradient(135deg,#ffe08a,#fff8dc)", about: "Cliffside towns, lemon groves and long seafood lunches." },
+  { id: 5, name: "Serengeti Safari", place: "Tanzania", region: "Africa", days: 8, price: 3790, rating: 4.9, icon: "🦁", bg: "linear-gradient(135deg,#f5b36b,#fff0dc)", about: "Game drives across the plains during the great migration." },
+  { id: 6, name: "Patagonia Trek", place: "Chile", region: "Americas", days: 10, price: 3290, rating: 4.8, icon: "🏔️", bg: "linear-gradient(135deg,#b3c7e6,#eef3fb)", about: "Hike Torres del Paine with mountain huts and expert guides." },
+  { id: 7, name: "Maldives Overwater", place: "Maldives", region: "Asia", days: 5, price: 2980, rating: 4.9, icon: "🏝️", bg: "linear-gradient(135deg,#6fe0d6,#e3fbf8)", about: "A private villa over the lagoon, snorkeling and sandbank dinners." },
+  { id: 8, name: "Cusco & Machu Picchu", place: "Peru", region: "Americas", days: 8, price: 2410, rating: 4.7, icon: "🦙", bg: "linear-gradient(135deg,#d9b88f,#f8efe2)", about: "Acclimatize in the Sacred Valley, then take the train to the citadel." },
+];
+const REGIONS = ["All", "Europe", "Asia", "Africa", "Americas"];
+const REVIEWS = [
+  { n: "Amina R.", t: "Every transfer and hotel was sorted before we landed. We just enjoyed Kyoto." },
+  { n: "Daniel K.", t: "Our guide in Tanzania was outstanding. Best trip we have taken as a family." },
+  { n: "Sofia M.", t: "They rebuilt our Amalfi plan in one day when a flight changed. Calm and quick." },
+];
+
+function Nav({ dark, setDark }) {
+  return (
+    <nav><div className="wrap">
+      <a className="logo" href="#top">Tideline</a>
+      <ul>{["Trips", "Why us", "Reviews", "Contact"].map(l => <li key={l}><a href={"#" + l.toLowerCase().replace(" ", "")}>{l}</a></li>)}</ul>
+      <button className="chip" onClick={() => setDark(d => !d)} aria-label="Toggle dark mode">{dark ? "Light" : "Dark"}</button>
+    </div></nav>
+  );
+}
+
+function Hero({ onSearch }) {
+  const [q, setQ] = useState({ dest: "", budget: "any", days: "any" });
+  const set = k => e => setQ({ ...q, [k]: e.target.value });
+  return (
+    <>
+      <header className="hero" id="top"><div className="wrap">
+        <h1>Trips planned by people who have been there</h1>
+        <p>Pick a destination and we handle flights, stays and local guides, with one person on call for the whole trip.</p>
+        <a className="btn" href="#trips">Browse trips</a>
+        <svg className="wave" viewBox="0 0 1440 60" preserveAspectRatio="none"><path fill="var(--bg)" d="M0 30 Q180 0 360 30 T720 30 T1080 30 T1440 30 V60 H0Z"/></svg>
+      </div></header>
+      <div className="wrap">
+        <div className="search" role="search">
+          <div><label htmlFor="d">Destination</label><input id="d" placeholder="Country or trip" value={q.dest} onChange={set("dest")} /></div>
+          <div><label htmlFor="b">Budget</label><select id="b" value={q.budget} onChange={set("budget")}><option value="any">Any</option><option value="1000">Under $1,000</option><option value="2500">Under $2,500</option><option value="4000">Under $4,000</option></select></div>
+          <div><label htmlFor="n">Length</label><select id="n" value={q.days} onChange={set("days")}><option value="any">Any</option><option value="5">Up to 5 days</option><option value="8">Up to 8 days</option><option value="12">Up to 12 days</option></select></div>
+          <div style={{ alignSelf: "end" }}><button className="btn" style={{ width: "100%" }} onClick={() => { onSearch(q); document.getElementById("trips").scrollIntoView(); }}>Find trips</button></div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function TripCard({ t, saved, toggle, book }) {
+  return (
+    <article className="card">
+      <div className="pic" style={{ background: t.bg }} aria-hidden="true">{t.icon}</div>
+      <div className="body">
+        <div className="meta"><span>{t.place}</span><span>★ {t.rating}</span></div>
+        <h3>{t.name}</h3>
+        <p style={{ margin: 0, color: "var(--mut)", fontSize: ".95rem" }}>{t.about}</p>
+        <div className="meta"><span>{t.days} days</span></div>
+        <div className="row">
+          <div><span className="price">${t.price.toLocaleString()}</span><small> / person</small></div>
+          <div style={{ display: "flex", gap: 8 }}>
+            <button className="chip" aria-pressed={saved} onClick={() => toggle(t.id)}>{saved ? "Saved" : "Save"}</button>
+            <button className="btn" onClick={() => book(t)}>Book</button>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function BookModal({ trip, close }) {
+  const [f, setF] = useState({ name: "", email: "", people: 2 });
+  const [done, setDone] = useState(false);
+  const [err, setErr] = useState("");
+  const submit = e => {
+    e.preventDefault();
+    if (!f.name.trim() || !/^\S+@\S+\.\S+$/.test(f.email)) { setErr("Enter your name and a valid email address."); return; }
+    setDone(true);
+  };
+  const total = trip.price * f.people;
+  return (
+    <div className="modal" onClick={close}>
+      <div role="dialog" aria-modal="true" aria-label={"Book " + trip.name} onClick={e => e.stopPropagation()}>
+        {done ? (<>
+          <h3>Request sent</h3>
+          <p>Thanks {f.name}. We will email {f.email} within one business day with your {trip.name} itinerary.</p>
+          <button className="btn" onClick={close}>Close</button>
+        </>) : (
+          <form onSubmit={submit} style={{ maxWidth: "none" }}>
+            <h3>Book {trip.name}</h3>
+            <div><label htmlFor="bn">Full name</label><input id="bn" value={f.name} onChange={e => setF({ ...f, name: e.target.value })} /></div>
+            <div><label htmlFor="be">Email</label><input id="be" type="email" value={f.email} onChange={e => setF({ ...f, email: e.target.value })} /></div>
+            <div><label htmlFor="bp">Travelers</label><input id="bp" type="number" min="1" max="12" value={f.people} onChange={e => setF({ ...f, people: Math.max(1, +e.target.value || 1) })} /></div>
+            <p style={{ margin: 0 }}>Estimated total: <b>${total.toLocaleString()}</b></p>
+            {err && <div className="msg" role="alert">{err}</div>}
+            <div style={{ display: "flex", gap: 8 }}><button className="btn" type="submit">Send request</button><button type="button" className="btn alt" onClick={close}>Cancel</button></div>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [dark, setDark] = useState(window.matchMedia("(prefers-color-scheme: dark)").matches);
+  const [region, setRegion] = useState("All");
+  const [query, setQuery] = useState({ dest: "", budget: "any", days: "any" });
+  const [saved, setSaved] = useState(() => { try { return JSON.parse(localStorage.getItem("saved") || "[]"); } catch { return []; } });
+  const [booking, setBooking] = useState(null);
+  const [sent, setSent] = useState(false);
+
+  useEffect(() => { document.documentElement.dataset.theme = dark ? "dark" : "light"; }, [dark]);
+  useEffect(() => { try { localStorage.setItem("saved", JSON.stringify(saved)); } catch {} }, [saved]);
+
+  const toggle = id => setSaved(s => s.includes(id) ? s.filter(x => x !== id) : [...s, id]);
+  const list = useMemo(() => TRIPS.filter(t =>
+    (region === "All" || t.region === region) &&
+    (!query.dest || (t.name + t.place).toLowerCase().includes(query.dest.toLowerCase())) &&
+    (query.budget === "any" || t.price <= +query.budget) &&
+    (query.days === "any" || t.days <= +query.days)
+  ), [region, query]);
+
+  return (
+    <>
+      <Nav dark={dark} setDark={setDark} />
+      <Hero onSearch={setQuery} />
+      <section id="trips"><div className="wrap">
+        <h2>Featured trips</h2>
+        <p className="sub">{list.length} trip{list.length !== 1 && "s"} match. You have saved {saved.length}.</p>
+        <div className="chips">{REGIONS.map(r => <button key={r} className="chip" aria-pressed={region === r} onClick={() => setRegion(r)}>{r}</button>)}</div>
+        {list.length ? <div className="grid">{list.map(t => <TripCard key={t.id} t={t} saved={saved.includes(t.id)} toggle={toggle} book={setBooking} />)}</div>
+          : <p>No trips match those filters. Raise your budget or clear the destination.</p>}
+      </div></section>
+
+      <section id="whyus"><div className="wrap">
+        <div className="stats">
+          <div><b>12,000+</b>travelers sent</div><div><b>64</b>countries covered</div><div><b>24/7</b>on-trip support</div><div><b>4.8</b>average rating</div>
+        </div>
+      </div></section>
+
+      <section id="reviews" style={{ paddingTop: 0 }}><div className="wrap">
+        <h2>What travelers say</h2>
+        <div className="grid" style={{ marginTop: 24 }}>{REVIEWS.map(r => <div className="card quote" key={r.n}><p>"{r.t}"</p><b>{r.n}</b></div>)}</div>
+      </div></section>
+
+      <section id="contact"><div className="wrap">
+        <h2>Tell us where you want to go</h2>
+        <p className="sub">Share a rough plan and a planner will reply within one business day.</p>
+        {sent ? <div className="msg" role="status">Message sent. We will be in touch soon.</div> :
+          <form onSubmit={e => { e.preventDefault(); setSent(true); }}>
+            <div><label htmlFor="cn">Name</label><input id="cn" required /></div>
+            <div><label htmlFor="ce">Email</label><input id="ce" type="email" required /></div>
+            <div><label htmlFor="cm">Trip idea</label><textarea id="cm" rows="4" required /></div>
+            <button className="btn" type="submit" style={{ justifySelf: "start" }}>Send message</button>
+          </form>}
+      </div></section>
+
+      <footer><div className="wrap">© 2026 Tideline Travel. Demo site: bookings are not processed.</div></footer>
+      {booking && <BookModal trip={booking} close={() => setBooking(null)} />}
+    </>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
